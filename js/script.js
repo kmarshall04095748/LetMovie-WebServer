@@ -1,22 +1,23 @@
 // --- Ponto de Entrada Principal ---
+
 document.addEventListener("DOMContentLoaded", async () => {
-  // 1. Lógica da Página de Listagem
+  //Lógica da Página de Listagem
   if (document.getElementById("listinha")) {
     await carregarFilmes();
   }
 
-  // 2. Lógica da Página de Sucesso
+  //Lógica da Página de Sucesso
   if (document.getElementById("sucesso-container")) {
     await carregarDetalhesSucesso();
   }
 
-  // 3. Lógica da Página de Cadastro (Formulário)
+  //Lógica da Página de Cadastro (Formulário)
   const formCadastro = document.getElementById("cadastro-input");
   if (formCadastro) {
     setupFormularioCadastro(formCadastro);
   }
 
-  // 4. Lógica da Página de Login (Formulário)
+  // Lógica da Página de Login (Formulário)
   const formLogin = document.getElementById("login-form");
   if (formLogin) {
     setupFormularioLogin(formLogin);
@@ -25,7 +26,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 // --- Lógica da Página de Sucesso ---
 async function carregarDetalhesSucesso() {
-  // 1. Pegar o ID da URL
+  //Pega o ID da URL
   const params = new URLSearchParams(window.location.search);
   const idFilme = params.get("id");
 
@@ -42,7 +43,7 @@ async function carregarDetalhesSucesso() {
   }
 
   try {
-    // 2. Fazer o fetch na nova API /api/filme/{id}
+    // Faz o fetch na nova API /api/filme/{id}
     const resp = await fetch(`/api/filme/${idFilme}`);
     if (!resp.ok) {
       throw new Error(`HTTP error! status: ${resp.status}`);
@@ -50,7 +51,7 @@ async function carregarDetalhesSucesso() {
 
     const filme = await resp.json();
 
-    // 3. Preencher o HTML com os dados do filme
+    //Preenche o HTML com os dados do filme
     document.getElementById("filme-poster").src =
       filme.poster || "https://via.placeholder.com/150x220?text=Sem+Imagem";
     document.getElementById("filme-titulo").textContent =
@@ -132,7 +133,6 @@ async function carregarFilmes() {
 }
 
 /* --- Deletar Filme (Função Global) --- */
-// Deixamos esta função fora do DOMContentLoaded para que o "onclick" do HTML a encontre
 async function deletarFilme(id_filme) {
   if (
     !confirm(
@@ -224,7 +224,7 @@ function setupFormularioLogin(formLogin) {
 }
 
 
-// --- Modal de Erro (Função Auxiliar) ---
+// --- Popup de Erro ---
 function mostrarModal(mensagem) {
   const modalAntigo = document.querySelector(".modal");
   if (modalAntigo) modalAntigo.remove();

@@ -25,6 +25,7 @@ body {
   color: white;
 }
 
+/*sobreposição sobre a imagem de fundo*/
 .body-page::after {
   content: "";
   position: absolute;
@@ -39,22 +40,27 @@ body {
   ); /* sombra */
 }
 
+/*lógica para que todo o conteúdo fique acima da sobreposição*/
 .body-page > * {
   position: relative;
   z-index: 1;
 }
 
+/* ========================== Navbar ==========================*/
+
+/*cabeçalho*/
 header {
   width: 100%;
   height: 60px;
   background-color: #000;
   display: flex;
   align-items: center;
-  justify-content: space-between; /* separa título e nav */
-  padding: 0 40px; /* espaçamento lateral */
+  justify-content: space-between; 
+  padding: 0 40px; 
   box-sizing: border-box;
 }
 
+/*Título logo*/
 header h1 {
   font-family: "Inter", sans-serif;
   font-size: 30px;
@@ -66,6 +72,7 @@ header h1 .logo-movie {
   color: red;
 }
 
+/*lista na horizontal para navegação entre páginas*/
 nav ul {
   display: flex;
   list-style: none;
@@ -88,6 +95,8 @@ nav a:hover {
 }
 
 /*================ Página Login ==========================*/
+
+/*estilo do bloco da página de login*/
 .login-page {
   margin-left: auto;
   margin-right: auto;
@@ -104,6 +113,7 @@ nav a:hover {
   border: 1px solid #cccccc;
 }
 
+/*estilo do título e parágrafo da página de login*/
 .login-page h2 {
   color: white;
   font-size: 35px;
@@ -121,6 +131,7 @@ nav a:hover {
   text-align: end;
 }
 
+/*estilização dos campos de entrada*/
 .login-input {
   display: block;
   margin-bottom: 20px;
@@ -167,6 +178,7 @@ nav a:hover {
   transform: translateY(-15px) scale(0.8);
 }
 
+/*estilização do botão de login*/
 .button-container {
   display: flex;
   justify-content: center;
@@ -202,6 +214,8 @@ nav a:hover {
 }
 
 /*==================== Página Cadastro ============================*/
+
+/*link para voltar à página de login*/
 .link-voltar {
   display: flex;
   margin-top: 10px;
@@ -215,6 +229,7 @@ nav a:hover {
   color: white;
 }
 
+/*estilo do bloco da página de cadastro*/
 .cadastro-page {
   margin-left: auto;
   margin-right: auto;
@@ -231,6 +246,7 @@ nav a:hover {
   border: 1px solid #cccccc;
 }
 
+/*estilo do título e parágrafo da página de cadastro*/
 .cadastro-page h2 {
   color: white;
   font-size: 35px;
@@ -252,12 +268,14 @@ nav a:hover {
   margin-bottom: 20px;
 }
 
+/* Estilo da linha de formulário */
 .form-row {
   display: flex;
   gap: 20px;
   width: 100%;
 }
 
+/* lógica para que todo o conteúdo fique acima da sobreposição */
 .form-row > div {
   flex: 1;
   min-width: 0;
@@ -297,7 +315,7 @@ nav a:hover {
   resize: vertical;
 }
 
-/*Options*/
+/*Dropdown com opções para linguagens e categorias*/
 .select-container {
   position: relative;
   display: flex;
@@ -319,6 +337,7 @@ nav a:hover {
   cursor: pointer;
 }
 
+/* Estilo do placeholder */
 .select-container select:valid {
   color: white;
 }
@@ -332,12 +351,12 @@ nav a:hover {
   font-size: 18px;
 }
 
-/* estiliza a opção desabilitada (placeholder cinza) */
+/* Placeholder cinza */
 #cadastro-input select option[disabled] {
-  color: #999;
+  color: #cccccc;
 }
 
-/* Força scroll no dropdown quando há muitas opções */
+/* Padding interno das opções */
 #cadastro-input select option {
   background-color: #000;
   color: white;
@@ -363,13 +382,14 @@ nav a:hover {
   margin-bottom: 10px;
 }
 
+/* Estilo do placeholder */
 .linguagem-select:valid {
   color: white;
 }
 
 /* Placeholder cinza */
 .linguagem-select option[disabled] {
-  color: #999;
+  color: #cccccc;
 }
 
 /* Padding interno das opções */
@@ -377,11 +397,13 @@ nav a:hover {
   padding: 8px;
 }
 
+/* Ajuste da altura e rolagem das opções ao focar */
 .linguagem-select:focus option {
-  height: 20px;
+  height: 120px;
   overflow-y: auto;
 }
 
+/*estilização do botão de cadastro*/
 .button-cadastro {
   display: flex;
   align-items: center;
@@ -415,6 +437,7 @@ nav a:hover {
 
 /*============== index page ==================*/
 
+/*estilo do bloco da página inicial*/
 .index-section-page {
   color: white;
   margin-left: auto;
@@ -435,6 +458,7 @@ nav a:hover {
   margin-bottom: 46px;
 }
 
+/*estilo do título e parágrafo da página inicial*/
 .index-section-page h2 {
     font-size: 35px;
     text-align: center;
@@ -451,6 +475,7 @@ nav a:hover {
     text-align: center;
 }
 
+/*estilização do botão da página inicial*/
 .index-section-page button {
   display: flex;  align-items: center;  justify-content: center;  width: 200px;
   background-color: red;
@@ -484,6 +509,8 @@ nav a:hover {
 }
 
 /*================ Listar Filmes Page =====================*/
+
+/*estilo do bloco da página de listar filmes*/
 .listar-filmes-section-page h2{
     color: white;
     font-size: 35px;
@@ -510,54 +537,57 @@ footer p {
 }
 
 /*================== tela listar filmes =====================*/
-/* --- Estilos para o Card na Página de Listagem (listar_filmes.html) --- */
 
+/*estilo do card de filme*/
 .cardFilme {
     display: flex;
-    flex-wrap: wrap; /* Permite que os itens quebrem a linha */
+    flex-wrap: wrap; 
     background-color: #1a1a1a;
     border-radius: 8px;
     overflow: hidden;
     border: 1px solid #333;
-    margin-bottom: 20px; /* Espaçamento entre os cards */
-    max-width: 900px; /* Limita a largura do card na lista */
+    margin-bottom: 20px; 
+    max-width: 900px;
     margin-left: auto;
     margin-right: auto;
 }
 
-/* 1. REQUISITO: TAMANHO PADRÃO DO POSTER */
+/*poster do filme*/
 .cardFilme .posterFilme {
     width: 150px;
     height: 220px;
-    object-fit: cover; /* Garante que a imagem cubra o espaço sem distorcer */
+    object-fit: cover;
     flex-shrink: 0;
 }
 
-/* 2. REQUISITO: COR DO TEXTO (Branca/Cinza) */
+/*informações do filme*/
 .cardFilme .infoFilme {
-    color: white; /* Cor do texto principal */
+    color: white; 
     padding: 15px;
-    flex-grow: 1; /* Ocupa o espaço disponível */
-    flex-basis: 300px; /* Tamanho mínimo antes de quebrar */
+    flex-grow: 1; 
+    flex-basis: 300px; 
 }
 
+/*título do filme*/
 .cardFilme .infoFilme h3 {
-    color: #db0000; /* Título em vermelho */
+    color: #db0000; 
     font-size: 20px;
     margin-bottom: 10px;
 }
 
+/*detalhes do filme*/
 .cardFilme .infoFilme p {
     font-size: 14px;
     margin-bottom: 5px;
-    color: #ccc; /* Texto secundário em cinza claro */
+    color: #ccc; 
 }
 
+/*negrito nos detalhes do filme*/
 .cardFilme .infoFilme p strong {
-    color: white; /* Label (Ano, Duração...) em branco */
+    color: white;
 }
 
-/* Ações (botão de lixeira) */
+/*botão de lixeira*/
 .cardFilme .acoesCard {
     padding: 15px;
     display: flex;
@@ -567,8 +597,7 @@ footer p {
     background-color: #1a1a1a;
 }
 
-/* Estilos para a seção "Atores" (infoFilmeExtra) */
-/* Esta regra faz ela ocupar 100% da largura, indo para baixo */
+/*informações extras do filme*/
 .cardFilme .infoFilmeExtra {
     flex-basis: 100%;
     width: 100%;
@@ -578,11 +607,10 @@ footer p {
     background-color: #1a1a1a;    border-top: 1px solid #333; /* Linha sutil de separação */
 }
 
+/*negrito nas informações extras do filme*/
 .cardFilme .infoFilmeExtra strong {
     color: white;
 }
-
-/* --- Estilos para Botões e Mensagens (Bônus) --- */
 
 /* Mensagem de lista vazia */
 .mensagemVazia p {
@@ -616,22 +644,24 @@ footer p {
 
 /*================ Página Sucesso ==================*/
 
+/*estilo do bloco da página de sucesso*/
 .sucesso-page {
     margin-left: auto;
     margin-right: auto;
     display: flex;
     margin-top: 30px;
     padding: 30px;
-    width: 800px; /* Igual à página de cadastro */
+    width: 800px; 
     background-color: rgba(0, 0, 0, 0.8);
     flex-direction: column;
     margin-bottom: 30px;
     box-sizing: border-box;
     border-radius: 10px;
     border: 1px solid #cccccc;
-    align-items: center; /* Centraliza o card e os botões */
+    align-items: center; 
 }
 
+/*estilo do título e parágrafo da página de sucesso*/
 .sucesso-page h2 {
     color: white;
     font-size: 30px;
@@ -648,22 +678,25 @@ footer p {
     text-align: center;
 }
 
+/*estilo do bloco de mensagem de erro*/
 #error-message h2 {
     color: #db0000;
 }
 
+/*estilo do card de filme na página de sucesso*/
 .cardFilmeSucesso {
     display: flex;
     flex-wrap: wrap;
     background-color: #1a1a1a;
     border-radius: 8px;
     overflow: hidden;
-    border: 1px solid #333;
-    max-width: 600px; /* Largura do card */
+    border: 1px solid #333333;
+    max-width: 600px;
     box-sizing: border-box;
     margin-top: 15px;
 }
 
+/*poster do filme na página de sucesso*/
 .cardFilmeSucesso .posterFilme {
     width: 150px;
     height: 220px;
@@ -671,6 +704,7 @@ footer p {
     flex-shrink: 0;
 }
 
+/*informações do filme na página de sucesso*/
 .cardFilmeSucesso .infoFilme {
     color: white;
     padding: 15px;
@@ -678,24 +712,26 @@ footer p {
     flex-basis: 300px;
 }
 
+/*título do filme na página de sucesso*/
 .cardFilmeSucesso .infoFilme h3 {
-    color: #db0000; /* Vermelho */
+    color: #db0000; 
     font-size: 20px;
     margin-bottom: 10px;
 }
 
+/*detalhes do filme na página de sucesso*/
 .cardFilmeSucesso .infoFilme p {
     font-size: 14px;
     margin-bottom: 5px;
     color: #cccccc;
-    text-align: left; /* Importante para não ficar centralizado */
+    text-align: left; 
 }
 
 .cardFilmeSucesso .infoFilme p strong {
     color: white;
 }
 
-
+/*estilização dos botões na página de sucesso*/
 .sucesso-page .button-group {
     display: flex;
     justify-content: center;
@@ -707,7 +743,7 @@ footer p {
 
 .sucesso-page .button-group button {
     width: 220px;
-    height: 45px; /* altura fixa pra facilitar o centramento */
+    height: 45px; 
     background-color: red;
     border: none;
     border-radius: 10px;
@@ -715,7 +751,7 @@ footer p {
     font-weight: bold;
     font-size: 16px;
     cursor: pointer;
-    display: flex; /* centraliza o conteúdo dentro do botão */
+    display: flex;
     justify-content: center;
     align-items: center;
     transition: all 0.2s ease-in-out;

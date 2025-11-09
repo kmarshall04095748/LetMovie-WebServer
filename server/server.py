@@ -10,7 +10,7 @@ try:
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="root",       # <-- VERIFIQUE SUA SENHA
+        password="root",       
         database="LetMovie"
     )
     print("✅ Conexão com o banco de dados 'LetMovie' estabelecida.")
@@ -57,11 +57,10 @@ class MyHandle(SimpleHTTPRequestHandler):
             return cursor.lastrowid
 
     # =================================================================
-    # <<<--- 1. FUNÇÃO DE LOGIN ADICIONADA ---
-    # =================================================================
+    # Verificador de Login
     def accont_user(self, login, password):
-        loga = "Kety"   # Usuário correto
-        senha = "123456" # Senha correta
+        loga = "kety"     # Usuário correto
+        senha = "123456"  # Senha correta
 
         print(f"[Debug Login] Recebido: Login='{login}', Senha='{password}'") # Para debug
 
@@ -161,15 +160,14 @@ class MyHandle(SimpleHTTPRequestHandler):
             return super().do_GET()
 
         # =================================================================
-        # <<<--- 2. ROTA GET /login ADICIONADA ---
-        # =================================================================
+        # Rota para MOSTRAR a página de login
         elif path == "/login":
             self.path = "/html/login.html"
             return super().do_GET()
 
         else:
             if path == "/":
-                self.path = "/html/login.html"
+                self.path = "/html/index.html"
             elif path == "/sucesso.js":
                  self.path = "/js/script.js"
 
@@ -270,23 +268,23 @@ class MyHandle(SimpleHTTPRequestHandler):
                 send_json_response(500, {"status": "erro", "message": f"Erro interno do servidor: {str(e)}"})
 
         # =================================================================
-        # <<<--- 3. ROTA POST /login ADICIONADA ---
-        # =================================================================
-        elif path == "/login":
+        #Rota para RECEBER os dados do formulário de login
+        elif path == "/send_login": 
             try:
                 content_length = int(self.headers['Content-Length'])
                 body = self.rfile.read(content_length).decode('utf-8')
                 form_data = parse_qs(body)
 
-                # Use 'login' (que virá do HTML corrigido)
-                login_form = form_data.get('login', [''])[0] 
+                login_form = form_data.get('email', [''])[0] 
                 senha_form = form_data.get('password', [''])[0]
 
                 resultado = self.accont_user(login_form, senha_form)
 
                 if resultado == "Usuario logado":
+
                     send_json_response(200, {"status": "sucesso", "message": "Logado!"})
                 else:
+                    # Erro 401 - Unauthorized (Usuário ou senha errados)
                     send_json_response(401, {"status": "erro", "message": "Usuário ou senha inválidos"})
             except Exception as e:
                 send_json_response(500, {"status": "erro", "message": f"Erro no servidor: {e}"})
@@ -318,8 +316,8 @@ class MyHandle(SimpleHTTPRequestHandler):
                 cursor.execute("DELETE FROM LinguagemFilme WHERE id_filme = %s", (filme_id,))
                 cursor.execute("DELETE FROM ProdutoraFilme WHERE id_filme = %s", (filme_id,))
                 cursor.execute("DELETE FROM PaisFilme WHERE id_filme = %s", (filme_id,))
-                
-                # Agora, deleta o filme principal
+
+                # Deleta o filme principal
                 cursor.execute("DELETE FROM Filme WHERE ID = %s", (filme_id,))
                 
                 if cursor.rowcount == 0:
@@ -348,7 +346,6 @@ class MyHandle(SimpleHTTPRequestHandler):
             super(MyHandle, self).do_POST()
 
 def main():
-    # Muda o diretório de execução para a pasta raiz (WEB-SERVER)
     initial_dir = os.getcwd()
     if os.path.basename(initial_dir) == 'server':
         new_dir = os.path.join(initial_dir, '..')
