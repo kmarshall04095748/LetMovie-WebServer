@@ -21,14 +21,14 @@ except mysql.connector.Error as err:
 # --- Classe Principal do Servidor ---
 class MyHandle(SimpleHTTPRequestHandler):
 
-    # Função auxiliar para parsing de nomes
+    # --- Função auxiliar para parsing de nomes ---
     def parse_name(self, full_name):
         parts = full_name.strip().split(' ', 1)
         nome = parts[0]
         sobrenome = parts[1] if len(parts) > 1 else ''
         return nome, sobrenome
 
-    # Função auxiliar para buscar ou criar IDs
+    # --- Função auxiliar para buscar ou criar IDs ---
     def get_or_create_id(self, cursor, table_name, name_str, extra_cols=None):
         nome, sobrenome = self.parse_name(name_str)
         
@@ -55,7 +55,21 @@ class MyHandle(SimpleHTTPRequestHandler):
                 cursor.execute(sql_insert, (name_str,))
                 
             return cursor.lastrowid
-    
+
+    # =================================================================
+    # <<<--- 1. FUNÇÃO DE LOGIN ADICIONADA ---
+    # =================================================================
+    def accont_user(self, login, password):
+        loga = "Kety"   # Usuário correto
+        senha = "123456" # Senha correta
+
+        print(f"[Debug Login] Recebido: Login='{login}', Senha='{password}'") # Para debug
+
+        if login == loga and senha == password:
+            return "Usuario logado"
+        else:
+            return "Usuario não existe"
+
     # --- Métodos GET ---
     def do_GET(self):
         parsed_path = urlparse(self.path)
@@ -141,19 +155,21 @@ class MyHandle(SimpleHTTPRequestHandler):
             except Exception as e:
                 self.send_error(500, f"Erro ao buscar filme: {str(e)}")
 
-        # =================================================================
-        # CORREÇÃO 2: Adicionada rota para /sucesso.html
-        # =================================================================
+        # Rota para /sucesso.html
         elif path == "/sucesso.html":
-            # self.path ainda contém "?id=23", mas o super() vai procurar
-            # o arquivo /html/sucesso.html, que é o correto.
             self.path = "/html/sucesso.html"
             return super().do_GET()
 
-        # Servir arquivos estáticos (CSS, JS, HTML)
+        # =================================================================
+        # <<<--- 2. ROTA GET /login ADICIONADA ---
+        # =================================================================
+        elif path == "/login":
+            self.path = "/html/login.html"
+            return super().do_GET()
+
         else:
             if path == "/":
-                self.path = "/html/index.html"
+                self.path = "/html/login.html"
             elif path == "/sucesso.js":
                  self.path = "/js/script.js"
 
@@ -216,10 +232,6 @@ class MyHandle(SimpleHTTPRequestHandler):
                 if not mydb.is_connected(): mydb.reconnect()
                 cursor = mydb.cursor()
                 
-                # =================================================================
-                # CORREÇÃO 1: Removida a linha mydb.start_transaction()
-                # =================================================================
-                
                 cursor.execute("SELECT ID FROM Filme WHERE Titulo = %s", (data['titulo'],))
                 if cursor.fetchone():
                     raise mysql.connector.Error(errno=1062, msg="Já existe um filme com esse título!")
@@ -243,12 +255,12 @@ class MyHandle(SimpleHTTPRequestHandler):
                         id_ator = self.get_or_create_id(cursor, 'Ator', ator_nome)
                         cursor.execute("INSERT INTO AtorFilme (id_filme, id_ator) VALUES (%s, %s)", (id_filme, id_ator))
 
-                mydb.commit() # A transação implícita é finalizada aqui
+                mydb.commit() 
                 cursor.close()
                 send_json_response(200, {"status": "sucesso", "id": id_filme})
 
             except mysql.connector.Error as err:
-                mydb.rollback() # A transação implícita é revertida aqui
+                mydb.rollback() 
                 if err.errno == 1062:
                     send_json_response(409, {"status": "erro", "message": "Já existe um filme com esse título!"})
                 else:
@@ -256,6 +268,28 @@ class MyHandle(SimpleHTTPRequestHandler):
             except Exception as e:
                 mydb.rollback()
                 send_json_response(500, {"status": "erro", "message": f"Erro interno do servidor: {str(e)}"})
+
+        # =================================================================
+        # <<<--- 3. ROTA POST /login ADICIONADA ---
+        # =================================================================
+        elif path == "/login":
+            try:
+                content_length = int(self.headers['Content-Length'])
+                body = self.rfile.read(content_length).decode('utf-8')
+                form_data = parse_qs(body)
+
+                # Use 'login' (que virá do HTML corrigido)
+                login_form = form_data.get('login', [''])[0] 
+                senha_form = form_data.get('password', [''])[0]
+
+                resultado = self.accont_user(login_form, senha_form)
+
+                if resultado == "Usuario logado":
+                    send_json_response(200, {"status": "sucesso", "message": "Logado!"})
+                else:
+                    send_json_response(401, {"status": "erro", "message": "Usuário ou senha inválidos"})
+            except Exception as e:
+                send_json_response(500, {"status": "erro", "message": f"Erro no servidor: {e}"})
 
         # Rota POST: /delete
         elif self.path == '/delete':
@@ -275,33 +309,17 @@ class MyHandle(SimpleHTTPRequestHandler):
                 if not mydb.is_connected(): mydb.reconnect()
                 cursor = mydb.cursor()
                 
-                # =================================================================
-                # CORREÇÃO 1: Removida a linha mydb.start_transaction()
-                # =================================================================
-
                 print(f"--- Iniciando exclusão do Filme ID: {filme_id} ---")
 
                 # Deleta de TODAS as tabelas de junção primeiro
-                print(f"Deletando de AtorFilme...")
                 cursor.execute("DELETE FROM AtorFilme WHERE id_filme = %s", (filme_id,))
-                
-                print(f"Deletando de GeneroFilme...")
                 cursor.execute("DELETE FROM GeneroFilme WHERE id_filme = %s", (filme_id,))
-                
-                print(f"Deletando de FilmeDiretor...")
                 cursor.execute("DELETE FROM FilmeDiretor WHERE id_filme = %s", (filme_id,))
-                
-                print(f"Deletando de LinguagemFilme...")
                 cursor.execute("DELETE FROM LinguagemFilme WHERE id_filme = %s", (filme_id,))
-                
-                print(f"Deletando de ProdutoraFilme...")
                 cursor.execute("DELETE FROM ProdutoraFilme WHERE id_filme = %s", (filme_id,))
-                
-                print(f"Deletando de PaisFilme...")
                 cursor.execute("DELETE FROM PaisFilme WHERE id_filme = %s", (filme_id,))
                 
                 # Agora, deleta o filme principal
-                print(f"Deletando da tabela principal Filme...")
                 cursor.execute("DELETE FROM Filme WHERE ID = %s", (filme_id,))
                 
                 if cursor.rowcount == 0:
@@ -311,13 +329,13 @@ class MyHandle(SimpleHTTPRequestHandler):
                     return
 
                 # Sucesso!
-                mydb.commit() # A transação implícita é finalizada aqui
+                mydb.commit() 
                 cursor.close()
                 print(f"--- Sucesso! Filme ID: {filme_id} deletado. ---")
                 send_json_response(200, {"status": "sucesso", "message": "Filme deletado com sucesso."})
 
             except mysql.connector.Error as err:
-                mydb.rollback() # A transação implícita é revertida aqui
+                mydb.rollback() 
                 print(f"\n❌ ERRO DE BANCO DE DADOS AO DELETAR ID {filme_id_str}: {err}\n")
                 send_json_response(500, {"status": "erro", "message": f"Erro de banco de dados: {err.msg}"})
             

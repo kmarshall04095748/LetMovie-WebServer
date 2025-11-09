@@ -1,87 +1,94 @@
 // --- Ponto de Entrada Principal ---
-// Este evento "DOMContentLoaded" agora verifica em qual página estamos
-// e executa APENAS o código necessário para aquela página.
 document.addEventListener("DOMContentLoaded", async () => {
-    
-    // 1. Se encontrar a "#listinha", estamos na página "listar_filmes.html"
-    if (document.getElementById("listinha")) {
-        await carregarFilmes();
-    }
+  // 1. Lógica da Página de Listagem
+  if (document.getElementById("listinha")) {
+    await carregarFilmes();
+  }
 
-    // 2. Se encontrar o "#sucesso-container", estamos na página "sucesso.html"
-    if (document.getElementById("sucesso-container")) {
-        await carregarDetalhesSucesso();
-    }
+  // 2. Lógica da Página de Sucesso
+  if (document.getElementById("sucesso-container")) {
+    await carregarDetalhesSucesso();
+  }
+
+  // 3. Lógica da Página de Cadastro (Formulário)
+  const formCadastro = document.getElementById("cadastro-input");
+  if (formCadastro) {
+    setupFormularioCadastro(formCadastro);
+  }
+
+  // 4. Lógica da Página de Login (Formulário)
+  const formLogin = document.getElementById("login-form");
+  if (formLogin) {
+    setupFormularioLogin(formLogin);
+  }
 });
-
 
 // --- Lógica da Página de Sucesso ---
 async function carregarDetalhesSucesso() {
-    // 1. Pegar o ID da URL
-    const params = new URLSearchParams(window.location.search);
-    const idFilme = params.get("id");
+  // 1. Pegar o ID da URL
+  const params = new URLSearchParams(window.location.search);
+  const idFilme = params.get("id");
 
-    const loadingDiv = document.getElementById("loading-message");
-    const detalhesDiv = document.getElementById("filme-detalhes");
-    const errorDiv = document.getElementById("error-message");
-    // const container = document.getElementById("sucesso-container"); // Já verificado acima
+  const loadingDiv = document.getElementById("loading-message");
+  const detalhesDiv = document.getElementById("filme-detalhes");
+  const errorDiv = document.getElementById("error-message");
 
-    if (!idFilme) {
-        loadingDiv.style.display = "none";
-        errorDiv.style.display = "block";
-        errorDiv.querySelector("p").textContent = "Nenhum ID de filme foi fornecido.";
-        return;
+  if (!idFilme) {
+    loadingDiv.style.display = "none";
+    errorDiv.style.display = "block";
+    errorDiv.querySelector("p").textContent =
+      "Nenhum ID de filme foi fornecido.";
+    return;
+  }
+
+  try {
+    // 2. Fazer o fetch na nova API /api/filme/{id}
+    const resp = await fetch(`/api/filme/${idFilme}`);
+    if (!resp.ok) {
+      throw new Error(`HTTP error! status: ${resp.status}`);
     }
 
-    try {
-        // 2. Fazer o fetch na nova API /api/filme/{id}
-        const resp = await fetch(`/api/filme/${idFilme}`);
-        if (!resp.ok) {
-            throw new Error(`HTTP error! status: ${resp.status}`);
-        }
-        
-        const filme = await resp.json();
+    const filme = await resp.json();
 
-        // 3. Preencher o HTML com os dados do filme
-        // (Usando || "N/A" para campos que podem ser nulos)
-        document.getElementById("filme-poster").src = filme.poster || 'https://via.placeholder.com/150x220?text=Sem+Imagem';
-        document.getElementById("filme-titulo").textContent = filme.nomeFilme || "Título não encontrado";
-        document.getElementById("filme-ano").textContent = filme.ano || "N/A";
-        document.getElementById("filme-duracao").textContent = filme.tempo_duracao || "N/A";
-        document.getElementById("filme-generos").textContent = filme.generos || "N/A";
-        document.getElementById("filme-linguagens").textContent = filme.linguagens || "N/A";
-        document.getElementById("filme-diretores").textContent = filme.diretores || "N/A";
-        document.getElementById("filme-produtoras").textContent = filme.produtoras || "N/A";
-        document.getElementById("filme-atores").textContent = filme.atores || "N/A";
+    // 3. Preencher o HTML com os dados do filme
+    document.getElementById("filme-poster").src =
+      filme.poster || "https://via.placeholder.com/150x220?text=Sem+Imagem";
+    document.getElementById("filme-titulo").textContent =
+      filme.nomeFilme || "Título não encontrado";
+    document.getElementById("filme-ano").textContent = filme.ano || "N/A";
+    document.getElementById("filme-duracao").textContent =
+      filme.tempo_duracao || "N/A";
+    document.getElementById("filme-generos").textContent =
+      filme.generos || "N/A";
+    document.getElementById("filme-linguagens").textContent =
+      filme.linguagens || "N/A";
+    document.getElementById("filme-diretores").textContent =
+      filme.diretores || "N/A";
+    document.getElementById("filme-produtoras").textContent =
+      filme.produtoras || "N/A";
+    document.getElementById("filme-atores").textContent = filme.atores || "N/A";
 
-        // 4. Mover o H2 de "Sucesso" para dentro da div de detalhes
-        //    Isso garante que ele apareça junto com o card.
-        const h2Sucesso = loadingDiv.querySelector("h2");
-        detalhesDiv.prepend(h2Sucesso); // Adiciona o H2 no início do card
-        
-        // 5. Esconder o "carregando" e mostrar os "detalhes"
-        loadingDiv.style.display = "none";
-        detalhesDiv.style.display = "block";
+    const h2Sucesso = loadingDiv.querySelector("h2");
+    detalhesDiv.prepend(h2Sucesso); 
 
-    } catch (err) {
-        console.error("Erro ao buscar detalhes do filme:", err);
-        loadingDiv.style.display = "none";
-        errorDiv.style.display = "block";
-    }
+    loadingDiv.style.display = "none";
+    detalhesDiv.style.display = "block";
+  } catch (err) {
+    console.error("Erro ao buscar detalhes do filme:", err);
+    loadingDiv.style.display = "none";
+    errorDiv.style.display = "block";
+  }
 }
 
-
 // --- Lógica da Página de Listagem ---
-
-// --- Carregar Filmes (listagem) ---
 async function carregarFilmes() {
   try {
     const resp = await fetch("/api/filmes");
     if (!resp.ok) throw new Error(`HTTP error! status: ${resp.status}`);
     const filmes = await resp.json();
 
-    const lista = document.getElementById("listinha"); 
-    if (!lista) return; // Guarda de segurança
+    const lista = document.getElementById("listinha");
+    if (!lista) return; 
 
     lista.innerHTML = ""; 
 
@@ -92,11 +99,12 @@ async function carregarFilmes() {
 
     filmes.forEach((filme) => {
       const li = document.createElement("li");
-      
-      // Exibe os dados do seu banco de dados populado
       li.innerHTML = `
         <div class="cardFilme">
-          <img src="${filme.poster || 'https://via.placeholder.com/150x220?text=Sem+Imagem'}"
+          <img src="${
+            filme.poster ||
+            "https://via.placeholder.com/150x220?text=Sem+Imagem"
+          }"
                alt="Poster do filme" class="posterFilme">
           <div class="infoFilme">
             <h3>${filme.nomeFilme}</h3>
@@ -105,12 +113,12 @@ async function carregarFilmes() {
             <p><strong>Gênero(s):</strong> ${filme.generos || "N/A"}</p>
             <p><strong>Linguagem(ns):</strong> ${filme.linguagens || "N/A"}</p>
             <p><strong>Diretor(es):</strong> ${filme.diretores || "N/A"}</p>
-          </div>
-          <div class="infoFilmeExtra">
-             <p><strong>Atores:</strong> ${filme.atores || "N/A"}</p>
+            <p><strong>Atores:</strong> ${filme.atores || "N/A"}</p>
           </div>
           <div class="acoesCard">
-            <button class="botaoPequeno botaoPequenoExcluir" onclick="deletarFilme(${filme.id_filme})">
+            <button class="botaoPequeno botaoPequenoExcluir" onclick="deletarFilme(${
+              filme.id_filme
+            })">
               <i class="bi bi-trash-fill"></i>
             </button>
           </div>
@@ -123,56 +131,106 @@ async function carregarFilmes() {
   }
 }
 
-/* --- Deletar Filme --- */
+/* --- Deletar Filme (Função Global) --- */
+// Deixamos esta função fora do DOMContentLoaded para que o "onclick" do HTML a encontre
 async function deletarFilme(id_filme) {
-  if (!confirm("Tem certeza que deseja excluir este filme? Esta ação é irreversível.")) return;
+  if (
+    !confirm(
+      "Tem certeza que deseja excluir este filme? Esta ação é irreversível."
+    )
+  )
+    return;
 
-  const resposta = await fetch("/delete", { 
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: `id=${id_filme}` 
-  });
+  try {
+    const resposta = await fetch("/delete", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: `id=${id_filme}`,
+    });
 
-  const data = await resposta.json(); 
+    const data = await resposta.json();
 
-  if (resposta.ok) {
-    alert(data.message); 
-    carregarFilmes();
-  } else {
-    mostrarModal(data.message || "Erro ao deletar filme.");
+    if (resposta.ok) {
+      alert(data.message);
+      carregarFilmes();
+    } else {
+      mostrarModal(data.message || "Erro ao deletar filme.");
+    }
+  } catch(err) {
+      console.error("Erro ao deletar:", err);
+      mostrarModal("Erro de conexão ao tentar deletar.");
   }
 }
 
-
-const formCadastro = document.getElementById("cadastro-input"); 
-
-if (formCadastro) {
+// --- Lógica da Página de Cadastro ---
+function setupFormularioCadastro(formCadastro) {
   formCadastro.addEventListener("submit", async (e) => {
-    e.preventDefault(); 
-    
-    const formData = new FormData(formCadastro);
-    
-    const resp = await fetch("/cadastro", {
-      method: "POST",
-      body: new URLSearchParams(formData) // Envia os dados do form
-    });
-    
-    const data = await resp.json(); // Espera uma resposta JSON
+    e.preventDefault();
 
-    if (resp.ok && data.status === "sucesso") { 
-      window.location.href = `/sucesso.html?id=${data.id}`;
-    } else {
-      mostrarModal(data.message || "Ocorreu um erro desconhecido.");
+    const formData = new FormData(formCadastro);
+
+    try {
+        const resp = await fetch("/cadastro", {
+          method: "POST",
+          body: new URLSearchParams(formData), // Envia os dados do form
+        });
+
+        const data = await resp.json(); // Espera uma resposta JSON
+
+        if (resp.ok && data.status === "sucesso") {
+          window.location.href = `/sucesso.html?id=${data.id}`;
+        } else {
+          mostrarModal(data.message || "Ocorreu um erro desconhecido.");
+        }
+    } catch(err) {
+        console.error("Erro ao cadastrar:", err);
+        mostrarModal("Erro de conexão. Não foi possível cadastrar.");
     }
   });
 }
 
+// --- Lógica da Página de Login ---
+function setupFormularioLogin(formLogin) {
+  const errorMessage = document.getElementById("error-message");
+
+  formLogin.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (errorMessage) errorMessage.textContent = "";
+
+    const formData = new URLSearchParams(new FormData(formLogin));
+
+    try {
+      const response = await fetch("/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: formData.toString(),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.status === "sucesso") {
+        alert("Login bem-sucedido!");
+        window.location.href = "/html/index.html";
+      } else {
+        if (errorMessage) errorMessage.textContent = result.message;
+      }
+    } catch (error) {
+      console.error("Erro de rede:", error);
+      if (errorMessage) errorMessage.textContent = "Não foi possível conectar ao servidor.";
+    }
+  });
+}
+
+
+// --- Modal de Erro (Função Auxiliar) ---
 function mostrarModal(mensagem) {
   const modalAntigo = document.querySelector(".modal");
   if (modalAntigo) modalAntigo.remove();
 
   const modal = document.createElement("div");
-  modal.classList.add("modal"); 
+  modal.classList.add("modal");
 
   const styleId = "modal-style";
   if (!document.getElementById(styleId)) {
@@ -196,7 +254,7 @@ function mostrarModal(mensagem) {
 
   modal.innerHTML = `
     <div class="modal-conteudo">
-      <h2>❌ Erro no Cadastro</h2>
+      <h2>❌ Erro</h2>
       <p>${mensagem}</p>
       <button id="fecharModal">OK</button>
     </div>
